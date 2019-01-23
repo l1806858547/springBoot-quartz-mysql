@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 
 /**
@@ -19,6 +21,13 @@ import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
  */
 @Service
 public class JobServiceImpl implements JobService {
+
+
+    public static void main(String[] args) {
+        byte x= 64;
+        byte y= -6;
+        System.out.println(x/y+" "+x%y);
+    }
 
     @Autowired
     private SchedulerFactoryBean schedulerFactoryBean;
@@ -45,6 +54,7 @@ public class JobServiceImpl implements JobService {
 
                 //表达式调度构建器(即任务执行的时间,每5秒执行一次)
                 CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("*/5 * * * * ?");
+                //CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("* 51 13 * * ? *");
 
                 //按新的cronExpression表达式构建一个新的trigger
                 CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(jobName + "_trigger", jobGroup + "_trigger")
@@ -70,8 +80,10 @@ public class JobServiceImpl implements JobService {
                 //构建job信息,在用JobBuilder创建JobDetail的时候，有一个storeDurably()方法，可以在没有触发器指向任务的时候，将任务保存在队列中了。然后就能手动触发了
                 jobDetail = JobBuilder.newJob(AsyncJob.class).withIdentity(jobName, jobGroup).storeDurably().build();
                 jobDetail.getJobDataMap().put("asyncData","this is a async task");
+                Date startDate = DateBuilder.nextGivenSecondDate(null,15);
                 Trigger trigger = TriggerBuilder.newTrigger().withIdentity(jobName + "_trigger", jobGroup + "_trigger") //定义name/group
-                        .startNow()//一旦加入scheduler，立即生效
+                        .startAt(startDate)
+                        //.startNow()//一旦加入scheduler，立即生效
                         .withSchedule(simpleSchedule())//使用SimpleTrigger
                         .build();
                 scheduler.scheduleJob(jobDetail, trigger);
@@ -119,6 +131,7 @@ public class JobServiceImpl implements JobService {
             Scheduler scheduler = schedulerFactoryBean.getScheduler();
             JobKey jobKey = JobKey.jobKey(jobName,jobGroup);
             scheduler.deleteJob(jobKey);
+            //scheduler.deleteJobs()
             System.out.println("=========================delete job:" + jobName + " success========================");
         } catch (SchedulerException e) {
             e.printStackTrace();

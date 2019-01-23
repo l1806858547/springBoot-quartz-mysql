@@ -2,8 +2,6 @@ package com.lsp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 
 /**
  * @author lsp
@@ -12,7 +10,9 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
  * @Description: TODO
  * @date 2018/12/24 17:31
  */
-@SpringBootApplication(exclude= {DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
+//@EntityScan("com.lsp.pojo")
+//@EnableJpaRepositories("com.lsp.dao")
+@SpringBootApplication
 public class Lsp {
 
     public static void main(String[] args) {

@@ -1,3 +1,65 @@
 server:
   port: 8084
   context-path: /spring-quartz
+spring:
+  mvc:
+    static-path-pattern: /**
+  resources:
+    static-locations: classpath:/templates/,classpath:/resources/,classpath:/static/
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: LEGACYHTML5
+    encoding: utf-8
+    content-type: text/html
+    cache: false
+  data:
+  profiles: default
+  datasource:
+    #    url: jdbc:mysql://192.168.2.118:3306/shopxx?useUnicode=true&characterEncoding=utf-8
+#    url: jdbc:mysql://192.144.176.140:3306/shopproduce??useUnicode=true&characterEncoding=utf-8&serverTimezone=Hongkong
+    #    url: jdbc:mysql://192.144.176.140:3306/test?useUnicode=true&characterEncoding=utf-8&serverTimezone=Hongkong
+    #    url: jdbc:log4jdbc:mysql://192.144.176.140:3306/test?useUnicode=true&characterEncoding=utf-8&serverTimezone=Hongkong
+    #    url: jdbc:mysql://172.21.16.3:3306/shopproduce?useUnicode=true&characterEncoding=utf-8
+    url: jdbc:log4jdbc:mysql://192.168.2.121:3306/test?useUnicode=true&characterEncoding=utf-8&serverTimezone=Hongkong
+#    driverClassName: com.mysql.cj.jdbc.Driver
+#    driverClassName: com.mysql.jdbc.Driver
+    driverClassName: net.sf.log4jdbc.DriverSpy
+    username: root
+    password: root
+#    password: pwd@123
+
+    platform: mysql
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialSize: 200
+    minIdle: 200
+    maxActive: 500
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 30000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    # 打开PSCache，并且指定每个连接上PSCache的大小
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    filters: stat,wall,slf4j
+    # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+  jpa:
+    #配置数据库类型
+    database: MYSQL
+    #配置是否打印sql
+#    show-sql: true
+    #Hibernate相关配置
+    hibernate:
+      #配置级联等级
+      ddl-auto: create
+      naming:
+        #命名策略
+        strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
