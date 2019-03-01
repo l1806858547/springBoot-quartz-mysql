@@ -1,6 +1,7 @@
 package com.lsp.service.impl;
 
 import com.lsp.dao.UserDao;
+import com.lsp.pojo.DateFilter;
 import com.lsp.pojo.User;
 import com.lsp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,5 +40,15 @@ public class UserServiceImpl implements UserService {
         //List<User> userList5=userDao.findByUsernameContaining("abc");
         List<User> userList7=userDao.findByUsernameIgnoreCase("abc");
         return userDao.findAll();
+    }
+
+    @Override
+    public void save(User user) {
+        userDao.save(user);
+    }
+
+    @Override
+    public List<DateFilter> findByDateFilter(String year, String month) {
+        return userDao.findByDateFilter(year+" "+month);
     }
 }

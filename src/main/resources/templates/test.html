@@ -8,59 +8,70 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Title</title>
-    <script th:src="@{/js/jquery.js}"></script>
-    <script th:src="@{/Highcharts-7.0.2/code/highcharts.js}"></script>
+    <script src="js/jquery.js" th:src="@{/js/jquery.js}" ></script>
+    <script  src="Highcharts-7.0.2/code/highcharts.js" th:src="@{/Highcharts-7.0.2/code/highcharts.js}"></script>
+    <script type="text/javascript">
+        Highcharts.setOptions({ global: { useUTC: false } });
+    </script>
 </head>
 <script type="text/javascript">
     $(function() {
-        var charts = Highcharts.chart({
-            // Highcharts 配置
-            chart: {
-                renderTo: 'container',  // 或 document.getElementById('container')
-                // borderColor: '#9A32CD',
-                // animation: false,
-                // backgroundColor: '#cdba96',
-                // borderWidth: 5,
-                type: 'spline'
+        var options = {
+            chart : {
+                type : 'line' , //指定图表的类型，默认是折线图（line）
+                renderTo: 'container',
             },
-            credits:{//版权信息
-                href: 'https://www.pinjuntech.com',
-                style:{
-                    "cursor": "pointer",
-                    "color": "#999999",
-                    "fontSize": "20px"
+            title : {
+                text : 'My first Highcharts chart' //指定图表标题
+            },
+            xAxis : {
+                // type:'datetime',
+                // tickInterval:24 * 3600 * 1000,
+                categories:[],
+                // dateTimeLabelFormats:{
+                //     day:'%Y-%m-%d',
+                // }
+            },
+            yAxis : {
+                allowDecimals:true,
+                title : {
+                    text : '价格'   // 指定y轴的标题
                 },
-                text: '品郡公社'
+                categories:[]
             },
-            title: {
-                align: 'left',
-                text: '待付款订单数据' //指定图表标题
+            tooltip:{
+                xDateFormat: '%Y-%m-%d',
+                shared: true
             },
-            xAxis: {
-                title: {
-                    text: '时间', //指定y轴的标题
-                    align: 'high'
-                },
-                categories: ['my', 'first', 'chart'] //指定x轴分组
-            },
-            yAxis: {
-                title: {
-                    text: '数量', //指定y轴的标题
-                    align: 'high'
+            series : [{ //指定数据列
+                name : 'Jane', //数据列名
+                data : [ 1.2, 0,5, 4 ,5,6,2,5,7] //数据
+            }]  //指定数据列,这里设为空，我们从后台拿数据
+        };
+        let xdata=[]
+        let ydata=[]
+        $.ajax({
+            url:"user/queryList",
+            success:function (res) {
+                console.log(res);
+
+                for(var i=0;i<res.length;i++){
+                    ydata.push(res[i].count)
+                    xdata.push(parseInt(res[i].day))
                 }
-            },
-            series: [{ //指定数据列
-                name: 'Jane', //数据列名
-                data: [1, 0, 4] //数据
-            }, {
-                name: 'John',
-                data: [5, 7, 3]
-            }],
-            exporting:{
+                options.xAxis.categories=xdata
+                // options.yAxis.categories=ydata
+                options.series=[{    name:'lsp',
+                                    data:ydata
+                                }]
+                //初始化chart
+                var chart = new Highcharts.Chart(options);
 
             }
-        });
+        })
+
     })
 </script>
 <body>

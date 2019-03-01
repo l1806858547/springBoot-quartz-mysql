@@ -14,10 +14,10 @@ import java.util.Date;
  */
 @Entity
 @Data
-@Table(name = "user", schema = "shopproduce", catalog = "")
+@Table(name = "user", schema = "test", catalog = "")
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer uid;
     @Column(unique =true)
     private String username;//帐号

@@ -1,7 +1,10 @@
 package com.lsp.dao;
 
+import com.lsp.pojo.DateFilter;
 import com.lsp.pojo.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -38,4 +41,6 @@ public interface UserDao extends JpaRepository<User,Long> {
 
     List<User> findByUsernameIgnoreCase(String abc);
 
+    @Query(nativeQuery = true,value = "select count(*),DATE_FORMAT(a.date,'%e') as day from user a where DATE_FORMAT(a.date,'%Y %m')= :yearMonth  group by day")
+    List<DateFilter> findByDateFilter(@Param("yearMonth")String yearMonth);
 }

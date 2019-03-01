@@ -1,4 +1,4 @@
-package com.lsp.config;
+package com.lsp.config.jdbc;
 
 import java.lang.annotation.*;
 
